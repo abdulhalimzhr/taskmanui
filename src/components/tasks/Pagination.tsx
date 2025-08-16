@@ -43,98 +43,116 @@ export default function Pagination({
 
   return (
     <div className="flex flex-col gap-4 mt-8">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start sm:items-center">
         {onItemsPerPageChange && (
           <div className="flex items-center gap-2">
-            <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
+            <label
+              htmlFor="itemsPerPage"
+              className="text-xs sm:text-sm text-gray-600"
+            >
               Show:
             </label>
             <select
               id="itemsPerPage"
               value={itemsPerPage || 6}
               onChange={e => onItemsPerPageChange(Number(e.target.value))}
-              className="input-field text-sm px-2 py-1 min-w-0 w-16"
+              className="input-field text-xs sm:text-sm px-2 py-1 min-w-0 w-16"
             >
               <option value={6}>6</option>
               <option value={12}>12</option>
               <option value={24}>24</option>
               <option value={48}>48</option>
             </select>
-            <span className="text-sm text-gray-600">per page</span>
+            <span className="hidden sm:block text-sm text-gray-600">
+              per page
+            </span>
           </div>
         )}
 
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2">
-            <button
-              onClick={() => onPageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Previous
-            </button>
-
-            {startPage > 1 && (
-              <>
-                <button
-                  onClick={() => onPageChange(1)}
-                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                  1
-                </button>
-                {startPage > 2 && (
-                  <span className="px-2 text-gray-500">...</span>
-                )}
-              </>
-            )}
-
-            {pages.map(page => (
+        <div className="flex flex-col items-end gap-y-2">
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-1">
               <button
-                key={page}
-                onClick={() => onPageChange(page)}
-                className={`px-3 py-2 text-sm font-medium rounded-lg ${
-                  page === currentPage
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
-                }`}
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1 px-2 py-1 font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
               >
-                {page}
+                <ChevronLeft className="w-2 h-2 sm:w-4 sm:h-4" />
+                Prev
               </button>
-            ))}
 
-            {endPage < totalPages && (
-              <>
-                {endPage < totalPages - 1 && (
-                  <span className="px-2 text-gray-500">...</span>
-                )}
+              {startPage > 1 && (
+                <>
+                  <button
+                    onClick={() => onPageChange(1)}
+                    className="px-2 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    1
+                  </button>
+                  {startPage > 2 && (
+                    <span className="px-2 text-gray-500">...</span>
+                  )}
+                </>
+              )}
+
+              {pages.map(page => (
                 <button
-                  onClick={() => onPageChange(totalPages)}
-                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  key={page}
+                  onClick={() => onPageChange(page)}
+                  className={`px-2 py-1 text-xs sm:text-sm font-medium rounded-lg ${
+                    page === currentPage
+                      ? 'bg-primary-600 text-white'
+                      : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
+                  }`}
                 >
-                  {totalPages}
+                  {page}
                 </button>
-              </>
+              ))}
+
+              {endPage < totalPages && (
+                <>
+                  {endPage < totalPages - 1 && (
+                    <span className="px-2 text-gray-500">...</span>
+                  )}
+                  <button
+                    onClick={() => onPageChange(totalPages)}
+                    className="px-2 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+
+              <button
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1 px-2 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+                <ChevronRight className="w-2 h-2 sm:w-4 sm:h-4" />
+              </button>
+            </div>
+          )}
+          <div className="block sm:hidden">
+            {totalItems ? (
+              <p className="text-xs sm:text-sm text-gray-600">
+                Showing {startItem} to {endItem} of {totalItems} results
+              </p>
+            ) : (
+              <div></div>
             )}
-
-            <button
-              onClick={() => onPageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </button>
           </div>
-        )}
+        </div>
 
-        {totalItems ? (
-          <p className="text-sm text-gray-600">
-            Showing {startItem} to {endItem} of {totalItems} results
-          </p>
-        ) : (
-          <div></div>
-        )}
+        <div className="hidden sm:block">
+          {totalItems ? (
+            <p className="text-xs sm:text-sm text-gray-600">
+              Showing {startItem} to {endItem} of {totalItems} results
+            </p>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
     </div>
   )
